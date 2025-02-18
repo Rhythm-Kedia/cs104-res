@@ -1,0 +1,4 @@
+date	size'/'remotesize	flags(request:Update,Range state:File response:Modified,Chunked,gZipped)	statuscode	status ('servermsg')	MIME	Etag|Date	URL	localfile	(from URL)
+12:14:16	1064614/1064614	---MCZ	200	added ('OK')	text/html	date:Tue,%2018%20Feb%202025%2006:44:14%20GMT	https://www.gnu.org/software/make/manual/make.html	./gnu-make/www.gnu.org/software/make/manual/make.html	(from )
+12:14:16	401/401	---M-Z	200	added ('OK')	text/plain	etag:%224b0-5ef144aba6595-gzip%22	https://www.gnu.org/robots.txt		(from )
+12:14:17	11707/11707	---MC-	404	error ('Not%20Found')	text/html	date:Tue,%2018%20Feb%202025%2006:44:16%20GMT	https://www.gnu.org/software/make/manual/dir.html	./gnu-make/www.gnu.org/software/make/manual/dir.html	(from https://www.gnu.org/software/make/manual/make.html)

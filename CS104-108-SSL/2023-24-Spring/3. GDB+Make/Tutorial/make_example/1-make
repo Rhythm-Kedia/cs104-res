@@ -1,0 +1,10 @@
+EXECUTABLE := my_exec
+FILES := add.cpp my.cpp
+
+$(EXECUTABLE): $(FILES)
+	@echo $?
+	@g++ $^ -o $@
+
+.PHONY: clean
+clean:
+	rm -f $(EXECUTABLE)

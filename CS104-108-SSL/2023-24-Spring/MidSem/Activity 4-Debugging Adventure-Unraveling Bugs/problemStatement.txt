@@ -1,0 +1,44 @@
+Weightage: 4  
+
+Welcome to the GDB activity. You are given a simple program in C++ that has bug(s) in it.
+Details are as under:
+1. 'labDirectory' contains the following files/folders:
+  a. matmul.cpp: This is the program file in which bugs are present.
+  b. testcases: This folder contains the 5 test cases, input and output.
+2. matmul.cpp: This program takes two matrices along with their dimensions as input, multiplies them and prints the resultant matrix.
+  a. Matrices are represented as 2D arrays. To access the element at i-th row and j-th column in a 2D matrix 'mat', mat[i][j] is used.
+
+Your job, find all the bugs in the program using GDB (and your brain) and fix them. 
+
+There are 10 public test cases. Each test case is of 1 mark. But in server evaluation which will use different test cases, we will finally scale it to 4 marks which is the weightage.
+
+NOTE: Above 10 test cases are just for your testing and by no means complete i.e. they do not cover every possible test case we are going to test your code on. The final marks will be given based on the hidden test cases run on the server. Therefore, you should create your own test cases as well to test your code. Keep in mind that the hidden test cases will be more complex than the given test cases and will test your code on edge cases as well.
+
+*************************** Usage Instruction ***************************
+Compile: g++ -g -o matmul matmul.cpp
+Run: ./matmul
+Input: The program expects input in the following format:
+a b (dimensions of matrix1)
+c d (dimensions of matrix2)
+a x b integers (matrix1)
+c x d integers (matrix2)
+Output: The program will output the product of the two matrices in the following format (if the dimensions are correct):
+a x d integers (product of matrix1 and matrix2)
+Example:
+Input:
+2 3
+3 2
+1 2 3
+4 5 6
+7 8
+9 10
+11 12
+Output:
+58 64
+139 154
+Explanation: The product of the two matrices is:
+|1*7 + 2*9 + 3*11 1*8 + 2*10 + 3*12| = |58 64|
+|4*7 + 5*9 + 6*11 4*8 + 5*10 + 6*12| |139 154|
+*************************** Constraints ***************************
+a, b, c, d <= 30
+-1000 <= matrix1[i][j], matrix2[i][j] <= 1000

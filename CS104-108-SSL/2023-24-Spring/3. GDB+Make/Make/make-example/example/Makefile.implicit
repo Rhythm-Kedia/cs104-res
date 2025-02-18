@@ -1,0 +1,20 @@
+all: udp-test
+
+OBJ = udp-test.o sockutil.o timeutil.o
+
+#CFLAGS = -Wall -Wextra
+
+udp-test: $(OBJ)
+	cc -o udp-test $(OBJ) -lm
+	ls -al
+	find ~ -name *.cpp
+
+udp-test.o: udp-test.c sockutil.h timeutil.h sync.h
+
+sockutil.o: sockutil.c sockutil.h timeutil.h
+
+timeutil.o: timeutil.c timeutil.h
+
+clean:
+	-rm -f *.o udp-test
+

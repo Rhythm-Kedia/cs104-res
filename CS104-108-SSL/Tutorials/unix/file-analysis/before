@@ -1,0 +1,41 @@
+fun_dir:
+total 20
+drwxr-xr-x 2 rhythm-kedia rhythm-kedia 4096 Jan 11  2024 Articles
+drwxr-xr-x 2 rhythm-kedia rhythm-kedia 4096 Nov 10 12:09 Jokes
+drwxr-xr-x 2 rhythm-kedia rhythm-kedia 4096 Jan 11  2024 Memes
+drwxr-xr-x 2 rhythm-kedia rhythm-kedia 4096 Jan 11  2024 Poems
+drwxr-xr-x 2 rhythm-kedia rhythm-kedia 4096 Jan 11  2024 Stories
+
+fun_dir/Articles:
+total 8
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 1866 Jan 11  2024 Mindfulness_in_Digital_Age.txt
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 1840 Jan 11  2024 The_Impact_of_AI_in_Everyday_Life.txt
+
+fun_dir/Jokes:
+total 12
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 623 Jan 11  2024 set1.txt
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 640 Jan 11  2024 set2.txt
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 637 Jan 11  2024 set3.txt
+
+fun_dir/Memes:
+total 560
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 32522 Jan 11  2024 10.jpg
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 53481 Jan 11  2024 1.jpg
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 39082 Jan 11  2024 2.jpg
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 55578 Jan 11  2024 3.jpg
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 65278 Jan 11  2024 4.jpg
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 53312 Jan 11  2024 5.jpg
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 64297 Jan 11  2024 6.jpg
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 63409 Jan 11  2024 7.jpg
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 49623 Jan 11  2024 8.jpg
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 77696 Jan 11  2024 9.jpg
+
+fun_dir/Poems:
+total 8
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 541 Jan 11  2024 Moonlit_dreams.txt
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 613 Jan 11  2024 Whispers_of_the_wind.txt
+
+fun_dir/Stories:
+total 8
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 1360 Jan 11  2024 The_Enchanted_Library.txt
+-rw-r--r-- 1 rhythm-kedia rhythm-kedia 3357 Jan 11  2024 The_Star_Collector.txt

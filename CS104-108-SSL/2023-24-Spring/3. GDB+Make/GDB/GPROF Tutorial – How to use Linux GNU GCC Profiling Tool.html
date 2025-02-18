@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<link href="//www.googletagmanager.com" rel="dns-prefetch" />
+<link href="https://www.google-analytics.com" rel="preconnect" crossorigin />
+<script src="https://www.googletagmanager.com/gtag/js?id=G-HDX87119XJ" async></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-HDX87119XJ');
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="https://static.thegeekstuff.com/wp-content/thesis/skins/classic-r/css.css.gzip?v=1688163810" rel="stylesheet" />
+<title>GPROF Tutorial &#8211; How to use Linux GNU GCC Profiling Tool</title>
+<meta name="description" content="Profiling is an important aspect of software programming. Through profiling one can determine the parts in program code that are time consuming and need to be re-written. This helps make your program execution faster which is always desired. In very large projects, profiling can save your day by not only determining th" />
+<meta name="robots" content="noodp, noydir" />
+<link href="https://www.thegeekstuff.com/2012/08/gprof-tutorial/" rel="canonical" />
+<link href="https://www.thegeekstuff.com/feed/" rel="alternate" type="application/rss+xml" title="The Geek Stuff feed" />
+<link href="https://www.thegeekstuff.com/xmlrpc.php" rel="pingback" />
+<link href="https://static.thegeekstuff.com/wp-content/uploads/2015/05/favicon.ico.gzip" rel="shortcut icon" />
+<link rel="alternate" type="application/rss+xml" title="The Geek Stuff &raquo; GPROF Tutorial &#8211; How to use Linux GNU GCC Profiling Tool Comments Feed" href="https://www.thegeekstuff.com/2012/08/gprof-tutorial/feed/" />
+<link rel='stylesheet' id='wp-block-library-css' href='https://static.thegeekstuff.com/wp-includes/css/dist/block-library/style.min.css.gzip?ver=6.2.4' type='text/css' media='all' />
+<style id='global-styles-inline-css' type='text/css'>
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}body .is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+.wp-block-navigation a:where(:not(.wp-element-button)){color: inherit;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}
+.wp-block-pullquote{font-size: 1.5em;line-height: 1.6;}
+</style>
+<link rel="https://api.w.org/" href="https://www.thegeekstuff.com/wp-json/" /><link rel="alternate" type="application/json" href="https://www.thegeekstuff.com/wp-json/wp/v2/posts/11221" /><link rel="alternate" type="application/json+oembed" href="https://www.thegeekstuff.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.thegeekstuff.com%2F2012%2F08%2Fgprof-tutorial%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://www.thegeekstuff.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.thegeekstuff.com%2F2012%2F08%2Fgprof-tutorial%2F&#038;format=xml" />
+<noscript><style>.menu { display: block; }</style></noscript></head>
+<body class="template-single">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-dark-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0.49803921568627" /><feFuncG type="table" tableValues="0 0.49803921568627" /><feFuncB type="table" tableValues="0 0.49803921568627" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.54901960784314 0.98823529411765" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.71764705882353 0.25490196078431" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-red"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 0.27843137254902" /><feFuncB type="table" tableValues="0.5921568627451 0.27843137254902" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-midnight"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0" /><feFuncG type="table" tableValues="0 0.64705882352941" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-magenta-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.78039215686275 1" /><feFuncG type="table" tableValues="0 0.94901960784314" /><feFuncB type="table" tableValues="0.35294117647059 0.47058823529412" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-green"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.65098039215686 0.40392156862745" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.44705882352941 0.4" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-orange"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.098039215686275 1" /><feFuncG type="table" tableValues="0 0.66274509803922" /><feFuncB type="table" tableValues="0.84705882352941 0.41960784313725" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><div class="container">
+	<div id="header" class="text_box header">
+		<p id="logo"><a href="https://www.thegeekstuff.com"><img decoding="async" src="https://static.thegeekstuff.com/wp-content/themes/thesis_18/custom/images/thegeekstuff.gif" alt="The Geek Stuff" /></a>
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- TGS Logo Header -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-8090601437064582"
+     data-ad-slot="4708993701"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+	</div>
+	<span class="menu_control">≡ Menu</span>
+<ul id="menu-tgs-menu" class="menu"><li id="menu-item-15798" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-15798"><a href="https://www.thegeekstuff.com/">Home</a></li>
+<li id="menu-item-15797" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15797"><a href="https://www.thegeekstuff.com/linux-101-hacks-ebook/">Free eBook</a></li>
+<li id="menu-item-15805" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15805"><a href="https://www.thegeekstuff.com/best-of-the-blog/">Start Here</a></li>
+<li id="menu-item-15800" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15800"><a href="https://www.thegeekstuff.com/contact/">Contact</a></li>
+<li id="menu-item-15802" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-15802"><a href="https://www.thegeekstuff.com/about/">About</a></li>
+</ul>
+	<div class="columns">
+		<div class="content">
+			<div id="post-11221" class="post_box grt top" itemscope itemtype="https://schema.org/Article">
+				<link href="https://www.thegeekstuff.com/2012/08/gprof-tutorial/" itemprop="mainEntityOfPage" />
+				<div class="headline_area">
+					<h1 class="headline" itemprop="headline">GPROF Tutorial &#8211; How to use Linux GNU GCC Profiling Tool</h1>
+					<div class="byline small">
+						<span class="post_author_intro">by</span> <span class="post_author" itemprop="author">Himanshu Arora</span>
+						<meta itemprop="datePublished" content="2012-08-10" />
+						<meta itemprop="dateModified" content="2012-08-10" />
+						<span class="post_date_intro">on</span> <span class="post_date" title="2012-08-10">August 10, 2012</span>
+					</div>
+				</div>
+				<div class="post_content" itemprop="articleBody">
+<p>Profiling is an important aspect of software programming. Through profiling one can determine the parts in program code that are time consuming and need to be re-written. This helps make your program execution faster which is always desired.<br />
+<span id="more-11221"></span><br />
+In very large projects, profiling can save your day by not only determining the parts in your program which are slower in execution than expected but also can help you find many other statistics through which many potential bugs can be spotted and sorted out.</p>
+<p>In this article, we will explore the GNU profiling tool &#8216;gprof&#8217;.</p>
+<h3>How to use gprof</h3>
+<p>Using the gprof tool is not at all complex. You just need to do the following on a high-level:</p>
+<ul>
+<li>Have profiling enabled while compiling the code</li>
+<li>Execute the program code to produce the profiling data</li>
+<li>Run the gprof tool on the profiling data file (generated in the step above).</li>
+</ul>
+<p>The last step above produces an analysis file which is in human readable form. This file contains a couple of tables (flat profile and call graph) in addition to some other information. While flat profile gives an overview of the timing information of the functions like time consumption for the execution of a particular function, how many times it was called etc. On the other hand, call graph focuses on each function like the functions through which a particular function was called, what all functions were called from within this particular function etc So this way one can get idea of the execution time spent in the sub-routines too.</p>
+<p>Lets try and understand the three steps listed above through a practical example. Following test code will be used throughout the article :</p>
+<pre>//test_gprof.c
+#include&lt;stdio.h&gt;
+
+void new_func1(void);
+
+void func1(void)
+{
+    printf("\n Inside func1 \n");
+    int i = 0;
+
+    for(;i&lt;0xffffffff;i++);
+    new_func1();
+
+    return;
+}
+
+static void func2(void)
+{
+    printf("\n Inside func2 \n");
+    int i = 0;
+
+    for(;i&lt;0xffffffaa;i++);
+    return;
+}
+
+int main(void)
+{
+    printf("\n Inside main()\n");
+    int i = 0;
+
+    for(;i&lt;0xffffff;i++);
+    func1();
+    func2();
+
+    return 0;
+}</pre>
+<pre>//test_gprof_new.c
+#include&lt;stdio.h&gt;
+
+void new_func1(void)
+{
+    printf("\n Inside new_func1()\n");
+    int i = 0;
+
+    for(;i&lt;0xffffffee;i++);
+
+    return;
+}</pre>
+<p>Note that the &#8216;for&#8217; loops inside the functions are there to consume some execution time.</p>
+<h3>Step-1 : Profiling enabled while compilation</h3>
+<p>In this first step, we need to make sure that the profiling is enabled when the compilation of the code is done. This is made possible by adding the &#8216;-pg&#8217; option in the compilation step.</p>
+    <center>
+      <div style="margin-left:2px; margin-top:10px; margin-bottom:10px; ">
+
+        <!-- AD BLOCK -->
+		
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- TGS Inside Content -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-8090601437064582"
+     data-ad-slot="8643685131"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <!-- END AD BLOCK -->
+
+	  </div>
+    </center>
+
+
+<p>From the man page of gcc :</p>
+<blockquote><p>-pg : Generate extra code to write profile information suitable for the analysis program gprof. You must use this option when compiling the source files you want data about, and you must also use it when linking.</p></blockquote>
+<p>So, lets compile our code with &#8216;-pg&#8217; option :</p>
+<pre>$ gcc -Wall -pg test_gprof.c test_gprof_new.c -o test_gprof
+$</pre>
+<p>Please note : The option &#8216;-pg&#8217; can be used with the gcc command that compiles (-c option), gcc command that links(-o option on object files) and with gcc command that does the both(as in example above).</p>
+<h3>Step-2 : Execute the code</h3>
+<p>In the second step, the binary file produced as a result of step-1 (above) is executed so that profiling information can be generated.</p>
+<pre>$ ls
+test_gprof  test_gprof.c  test_gprof_new.c
+
+$ ./test_gprof 
+
+ Inside main()
+
+ Inside func1 
+
+ Inside new_func1()
+
+ Inside func2 
+
+$ ls
+gmon.out  test_gprof  test_gprof.c  test_gprof_new.c
+
+$</pre>
+<p>So we see that when the binary was executed, a new file &#8216;gmon.out&#8217; is generated in the current working directory.</p>
+<p>Note that while execution if the program changes the current working directory (using chdir) then gmon.out will be produced in the new current working directory. Also, your program needs to have sufficient permissions for gmon.out to be created in current working directory.</p>
+<h3>Step-3 : Run the gprof tool</h3>
+<p>In this step, the gprof tool is run with the executable name and the above generated &#8216;gmon.out&#8217; as argument. This produces an analysis file which contains all the desired profiling information.</p>
+<pre>$  gprof test_gprof gmon.out &gt; analysis.txt</pre>
+<p>Note that one can explicitly specify the output file (like in example above) or the information is produced on stdout.</p>
+<pre>$ ls
+analysis.txt  gmon.out  test_gprof  test_gprof.c  test_gprof_new.c</pre>
+<p>So we see that a file named &#8216;analysis.txt&#8217; was generated.</p>
+<p>On a related note, you should also understand <a href="https://www.thegeekstuff.com/2010/03/debug-c-program-using-gdb/">how to debug your C program using gdb</a>.</p>
+<h3>Comprehending the profiling information</h3>
+<p>As produced above, all the profiling information is now present in &#8216;analysis.txt&#8217;. Lets have a look at this text file :</p>
+<pre>Flat profile:
+
+Each sample counts as 0.01 seconds.
+%    cumulative self          self   total
+time seconds    seconds calls s/call s/call name
+33.86 15.52     15.52    1    15.52  15.52  func2
+33.82 31.02     15.50    1    15.50  15.50  new_func1
+33.29 46.27     15.26    1    15.26  30.75  func1
+0.07  46.30     0.03                        main
+
+% the percentage of the total running time of the
+time program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+seconds for by this function and those listed above it.
+
+self the number of seconds accounted for by this
+seconds function alone. This is the major sort for this
+listing.
+
+calls the number of times this function was invoked, if
+this function is profiled, else blank.
+
+self the average number of milliseconds spent in this
+ms/call function per call, if this function is profiled,
+else blank.
+
+total the average number of milliseconds spent in this
+ms/call function and its descendents per call, if this
+function is profiled, else blank.
+
+name the name of the function. This is the minor sort
+for this listing. The index shows the location of
+the function in the gprof listing. If the index is
+in parenthesis it shows where it would appear in
+the gprof listing if it were to be printed.
+
+Call graph (explanation follows)
+
+granularity: each sample hit covers 2 byte(s) for 0.02% of 46.30 seconds
+
+index % time self children called name
+
+[1]   100.0  0.03  46.27          main [1]
+             15.26 15.50    1/1      func1 [2]
+             15.52 0.00     1/1      func2 [3]
+-----------------------------------------------
+             15.26 15.50    1/1      main [1]
+[2]   66.4   15.26 15.50    1     func1 [2]
+             15.50 0.00     1/1      new_func1 [4]
+-----------------------------------------------
+             15.52 0.00     1/1      main [1]
+[3]   33.5   15.52 0.00     1     func2 [3]
+-----------------------------------------------
+             15.50 0.00     1/1      func1 [2]
+[4] 33.5     15.50 0.00     1     new_func1 [4]
+-----------------------------------------------
+
+This table describes the call tree of the program, and was sorted by
+the total amount of time spent in each function and its children.
+
+Each entry in this table consists of several lines. The line with the
+index number at the left hand margin lists the current function.
+The lines above it list the functions that called this function,
+and the lines below it list the functions this one called.
+This line lists:
+index A unique number given to each element of the table.
+Index numbers are sorted numerically.
+The index number is printed next to every function name so
+it is easier to look up where the function in the table.
+
+% time This is the percentage of the `total' time that was spent
+in this function and its children. Note that due to
+different viewpoints, functions excluded by options, etc,
+these numbers will NOT add up to 100%.
+
+self This is the total amount of time spent in this function.
+
+children This is the total amount of time propagated into this
+function by its children.
+
+called This is the number of times the function was called.
+If the function called itself recursively, the number
+only includes non-recursive calls, and is followed by
+a `+' and the number of recursive calls.
+
+name The name of the current function. The index number is
+printed after it. If the function is a member of a
+cycle, the cycle number is printed between the
+function's name and the index number.
+
+For the function's parents, the fields have the following meanings:
+
+self This is the amount of time that was propagated directly
+from the function into this parent.
+
+children This is the amount of time that was propagated from
+the function's children into this parent.
+
+called This is the number of times this parent called the
+function `/' the total number of times the function
+was called. Recursive calls to the function are not
+included in the number after the `/'.
+
+name This is the name of the parent. The parent's index
+number is printed after it. If the parent is a
+member of a cycle, the cycle number is printed between
+the name and the index number.
+
+If the parents of the function cannot be determined, the word
+`' is printed in the `name' field, and all the other
+fields are blank.
+
+For the function's children, the fields have the following meanings:
+
+self This is the amount of time that was propagated directly
+from the child into the function.
+
+children This is the amount of time that was propagated from the
+child's children to the function.
+
+called This is the number of times the function called
+this child `/' the total number of times the child
+was called. Recursive calls by the child are not
+listed in the number after the `/'.
+
+name This is the name of the child. The child's index
+number is printed after it. If the child is a
+member of a cycle, the cycle number is printed
+between the name and the index number.
+
+If there are any cycles (circles) in the call graph, there is an
+entry for the cycle-as-a-whole. This entry shows who called the
+cycle (as parents) and the members of the cycle (as children.)
+The `+' recursive calls entry shows the number of function calls that
+were internal to the cycle, and the calls entry for each member shows,
+for that member, how many times it was called from other members of
+the cycle.
+
+Index by function name
+
+[2] func1 [1] main
+[3] func2 [4] new_func1</pre>
+<p>So (as already discussed) we see that this file is broadly divided into two parts :</p>
+<p>1. Flat profile<br />
+2. Call graph</p>
+<p>The individual columns for the (flat profile as well as call graph) are very well explained in the output itself.</p>
+<h3>Customize gprof output using flags</h3>
+<p>There are various flags available to customize the output of the gprof tool. Some of them are discussed below:</p>
+<h3>1. Suppress the printing of statically(private) declared functions using -a</h3>
+<p>If there are some static functions whose profiling information you do not require then this can be achieved using -a option :</p>
+<pre>$ gprof -a test_gprof gmon.out &gt; analysis.txt</pre>
+<p>Now if we see that analysis file :</p>
+<pre>Flat profile:
+
+Each sample counts as 0.01 seconds.
+%        cumulative self           self    total
+time  seconds       seconds calls  s/call  s/call  name
+67.15 30.77         30.77     2    15.39  23.14    func1
+33.82 46.27         15.50     1    15.50  15.50    new_func1
+0.07   46.30         0.03                          main
+
+...
+...
+...
+
+Call graph (explanation follows)
+
+granularity: each sample hit covers 2 byte(s) for 0.02% of 46.30 seconds
+
+index   %time        self  children  called  name
+
+[1]     100.0        0.03   46.27             main [1]
+                     30.77  15.50     2/2      func1 [2]
+-----------------------------------------------------
+                     30.77  15.50     2/2      main [1]
+[2]     99.9         30.77  15.50     2      func1 [2]
+                     15.50   0.00     1/1      new_func1 [3]
+----------------------------------------------------
+                     15.50   0.00     1/1      func1 [2]
+[3]        33.5      15.50 0.00       1      new_func1 [3]
+-----------------------------------------------
+
+...
+...
+...</pre>
+<p>So we see that there is no information related to func2 (which is defined static)</p>
+<h3>2. Suppress verbose blurbs using -b</h3>
+<p>As you would have already seen that gprof produces output with lot of verbose information so in case this information is not required then this can be achieved using the -b flag.</p>
+<pre>$ gprof -b test_gprof gmon.out &gt; analysis.txt</pre>
+<p>Now if we see the analysis file :</p>
+<pre>Flat profile:
+
+Each sample counts as 0.01 seconds.
+%       cumulative    self            self    total
+time    seconds       seconds  calls  s/call  s/call   name
+33.86 15.52            15.52      1    15.52  15.52    func2
+33.82 31.02            15.50      1    15.50  15.50    new_func1
+33.29 46.27            15.26      1    15.26  30.75    func1
+0.07   46.30            0.03                           main
+
+Call graph
+
+granularity: each sample hit covers 2 byte(s) for 0.02% of 46.30 seconds
+index % time self children called name
+
+[1]   100.0  0.03  46.27          main [1]
+             15.26 15.50    1/1      func1 [2]
+             15.52 0.00     1/1      func2 [3]
+-----------------------------------------------
+             15.26 15.50    1/1      main [1]
+[2]   66.4   15.26 15.50    1     func1 [2]
+             15.50 0.00     1/1      new_func1 [4]
+-----------------------------------------------
+             15.52 0.00     1/1      main [1]
+[3]   33.5   15.52 0.00     1     func2 [3]
+-----------------------------------------------
+             15.50 0.00     1/1      func1 [2]
+[4] 33.5     15.50 0.00     1     new_func1 [4]
+-----------------------------------------------
+Index by function name
+
+[2] func1 [1] main
+[3] func2 [4] new_func1</pre>
+<p>So we see that all the verbose information is not present in the analysis file.</p>
+<h3>3. Print only flat profile using -p</h3>
+<p>In case only flat profile is required then :</p>
+<pre>$ gprof -p -b test_gprof gmon.out &gt; analysis.txt</pre>
+<p>Note that I have used(and will be using) -b option so as to avoid extra information in analysis output.</p>
+<p>Now if we see that analysis output:</p>
+<pre>Flat profile:
+
+Each sample counts as 0.01 seconds.
+%       cumulative    self            self   total
+time    seconds       seconds  calls  s/call  s/call  name
+33.86   15.52          15.52      1   15.52   15.52    func2
+33.82   31.02          15.50      1   15.50   15.50    new_func1
+33.29   46.27          15.26      1   15.26   30.75    func1
+0.07    46.30          0.03                            main</pre>
+<p>So we see that only flat profile was there in the output.</p>
+<h3>4. Print information related to specific function in flat profile</h3>
+<p>This can be achieved by providing the function name along with the -p option:</p>
+<pre>$ gprof -pfunc1 -b test_gprof gmon.out &gt; analysis.txt</pre>
+<p>Now if we see that analysis output :</p>
+<pre>Flat profile:
+
+Each sample counts as 0.01 seconds.
+%          cumulative     self            self     total
+time       seconds        seconds  calls  s/call   s/call  name
+103.20     15.26          15.26     1     15.26   15.26    func1</pre>
+<p>So we see that a flat profile containing information related to only function func1 is displayed.</p>
+<h3>5. Suppress flat profile in output using -P</h3>
+<p>If flat profile is not required then it can be suppressed using the -P option :</p>
+<pre>$ gprof -P -b test_gprof gmon.out &gt; analysis.txt</pre>
+<p>Now if we see the analysis output :</p>
+<pre>Call graph
+
+granularity: each sample hit covers 2 byte(s) for 0.02% of 46.30 seconds</pre>
+<pre>index % time self children called name
+
+[1]   100.0  0.03  46.27          main [1]
+             15.26 15.50    1/1      func1 [2]
+             15.52 0.00     1/1      func2 [3]
+-----------------------------------------------
+             15.26 15.50    1/1      main [1]
+[2]   66.4   15.26 15.50    1     func1 [2]
+             15.50 0.00     1/1      new_func1 [4]
+-----------------------------------------------
+             15.52 0.00     1/1      main [1]
+[3]   33.5   15.52 0.00     1     func2 [3]
+-----------------------------------------------
+             15.50 0.00     1/1      func1 [2]
+[4] 33.5     15.50 0.00     1     new_func1 [4]
+-----------------------------------------------
+Index by function name
+
+[2] func1 [1] main
+[3] func2 [4] new_func1</pre>
+<p>So we see that flat profile was suppressed and only call graph was displayed in output.</p>
+<p>Also, if there is a requirement to print flat profile but excluding a particular function then this is also possible using -P flag by passing the function name (to exclude) along with it.</p>
+<pre>$ gprof -Pfunc1 -b test_gprof gmon.out &gt; analysis.txt</pre>
+<p>In the above example, we tried to exclude &#8216;func1&#8217; by passing it along with the -P option to gprof. Now lets see the analysis output:</p>
+<pre>Flat profile:
+
+Each sample counts as 0.01 seconds.
+%         cumulative      self              self    total
+time      seconds         seconds   calls   s/call  s/call  name
+50.76     15.52            15.52      1     15.52   15.52   func2
+50.69     31.02            15.50      1     15.50   15.50   new_func1
+0.10      31.05            0.03                             main</pre>
+<p>So we see that flat profile was displayed but information on func1 was suppressed.</p>
+<h3>6. Print only call graph information using -q</h3>
+<pre>gprof -q -b test_gprof gmon.out &gt; analysis.txt</pre>
+<p>In the example above, the option -q was used. Lets see what effect it casts on analysis output:</p>
+<pre>Call graph
+
+granularity: each sample hit covers 2 byte(s) for 0.02% of 46.30 seconds
+index % time self children called name
+
+[1]   100.0  0.03  46.27          main [1]
+             15.26 15.50    1/1      func1 [2]
+             15.52 0.00     1/1      func2 [3]
+-----------------------------------------------
+             15.26 15.50    1/1      main [1]
+[2]   66.4   15.26 15.50    1     func1 [2]
+             15.50 0.00     1/1      new_func1 [4]
+-----------------------------------------------
+             15.52 0.00     1/1      main [1]
+[3]   33.5   15.52 0.00     1     func2 [3]
+-----------------------------------------------
+             15.50 0.00     1/1      func1 [2]
+[4] 33.5     15.50 0.00     1     new_func1 [4]
+-----------------------------------------------
+Index by function name
+
+[2] func1 [1] main
+[3] func2 [4] new_func1</pre>
+<p>So we see that only call graph was printed in the output.</p>
+<h3>7. Print only specific function information in call graph.</h3>
+<p>This is possible by passing the function name along with the -q option.</p>
+<pre>$ gprof -qfunc1 -b test_gprof gmon.out &gt; analysis.txt</pre>
+<p>Now if we see the analysis output:</p>
+<pre>Call graph
+
+granularity: each sample hit covers 2 byte(s) for 0.02% of 46.30 seconds
+index % time self children called name
+
+             15.26 15.50    1/1      main [1]
+[2]   66.4   15.26 15.50    1     func1 [2]
+             15.50 0.00     1/1      new_func1 [4]
+-----------------------------------------------
+             15.50 0.00     1/1      func1 [2]
+[4]   33.5   15.50 0.00     1     new_func1 [4]
+-----------------------------------------------
+Index by function name
+
+[2] func1 (1) main
+(3) func2 [4] new_func1</pre>
+<p>So we see that information related to only func1 was displayed in call graph.</p>
+<h3>8. Suppress call graph using -Q</h3>
+<p>If the call graph information is not required in the analysis output then -Q option can be used.</p>
+<pre>$ gprof -Q -b test_gprof gmon.out &gt; analysis.txt</pre>
+<p>Now if we see the analysis output :</p>
+<pre>Flat profile:
+
+Each sample counts as 0.01 seconds.
+%       cumulative    self            self    total
+time    seconds       seconds  calls  s/call  s/call   name
+33.86 15.52            15.52      1   15.52   15.52    func2
+33.82 31.02            15.50      1   15.50   15.50    new_func1
+33.29 46.27            15.26      1   15.26   30.75    func1
+0.07   46.30            0.03                           main</pre>
+<p>So we see that only flat profile is there in the output. The whole call graph got suppressed.</p>
+<p>Also, if it is desired to suppress a specific function from call graph then this can be achieved by passing the desired function name along with the -Q option to the gprof tool.</p>
+<pre>$ gprof -Qfunc1 -b test_gprof gmon.out &gt; analysis.txt</pre>
+<p>In the above example, the function name func1 is passed to the -Q option.</p>
+<p>Now if we see the analysis output:</p>
+<pre>Call graph
+
+granularity: each sample hit covers 2 byte(s) for 0.02% of 46.30 seconds
+index % time self children called name
+
+[1]   100.0  0.03  46.27          main [1]
+             15.26 15.50    1/1      func1 [2]
+             15.52 0.00     1/1      func2 [3]
+-----------------------------------------------
+             15.52 0.00     1/1      main [1]
+[3]   33.5   15.52 0.00     1     func2 [3]
+-----------------------------------------------
+             15.50 0.00     1/1      func1 [2]
+[4]   33.5   15.50 0.00     1     new_func1 [4]
+-----------------------------------------------
+Index by function name
+
+(2) func1 [1] main
+[3] func2 [4] new_func1</pre>
+<p>So we see that call graph information related to func1 was suppressed.</p>
+				</div>
+<div style="margin:7px 0px 3px 0px; padding:5px; background:#F2F0E8">
+
+<div style="float:left; width=95px">
+<a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a><script async type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
+</div>
+
+<div style="float:left; padding:2px; width:90px"><iframe loading="lazy" src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.thegeekstuff.com%2F2012%2F08%2Fgprof-tutorial%2F&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>
+</div>
+
+<div style="padding:1px">Add your comment</div>
+
+</div>
+<h3>If you enjoyed this article, you might also like..</h3>
+<table>
+<tr>
+<td valign="top">
+<ol>
+<li><a href="https://www.thegeekstuff.com/2010/12/50-unix-linux-sysadmin-tutorials/">50 Linux Sysadmin Tutorials</a></li>
+<li><a href="https://www.thegeekstuff.com/2010/11/50-linux-commands/">50 Most Frequently Used Linux Commands (With Examples)</a></li>
+<li><a href="https://www.thegeekstuff.com/2011/12/linux-performance-monitoring-tools/">Top 25 Best Linux Performance Monitoring and Debugging Tools</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/03/15-practical-linux-find-command-examples/">Mommy, I found it! – 15 Practical Linux Find Command Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/linux-101-hacks-ebook/">Linux 101 Hacks 2nd Edition eBook</a>&nbsp;<img title="Linux 101 Hacks Book" src="https://static.thegeekstuff.com/images/free-small.png" alt="Linux 101 Hacks Book" /></li>
+</ol>
+</td>
+<td>
+<ul>
+<li><a href="https://www.thegeekstuff.com/2010/01/awk-introduction-tutorial-7-awk-print-examples/">Awk Introduction – 7 Awk Print Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/10/unix-sed-tutorial-advanced-sed-substitution-examples/">Advanced Sed Substitution Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/03/8-essential-vim-editor-navigation-fundamentals/">8 Essential Vim Editor Navigation Fundamentals</a></li>
+<li><a href="https://www.thegeekstuff.com/2011/06/iptables-rules-examples/">25 Most Frequently Used Linux IPTables Rules Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2008/08/turbocharge-putty-with-12-powerful-add-ons-software-for-geeks-3/">Turbocharge PuTTY with 12 Powerful Add-Ons</a></li>
+</ul>
+</td>
+</tr>
+</table>
+<br />
+<center>
+<table id="booktable">
+<tr>
+<td>
+<a rel="nofollow" href="https://www.thegeekstuff.com/bash-101-hacks-ebook/"><img decoding="async" loading="lazy" title="Bash 101 Hacks Book" src="https://static.thegeekstuff.com/images/bash-132.png" alt="Bash 101 Hacks Book" /></a>
+</td>
+<td>
+<a rel="nofollow" href="https://www.thegeekstuff.com/sed-awk-101-hacks-ebook/"><img decoding="async" loading="lazy" title="Sed and Awk 101 Hacks Book" src="https://static.thegeekstuff.com/images/sed-and-awk-132.png" alt="Sed and Awk 101 Hacks Book" /></a>
+</td>
+<td>
+<a rel="nofollow" href="https://www.thegeekstuff.com/nagios-core-ebook/"><img decoding="async" loading="lazy" title="Nagios Core 3 Book" src="https://static.thegeekstuff.com/images/nagios-core-132.png" alt="Nagios Core 3 Book" /></a>
+</td>
+<td>
+<a rel="nofollow" href="https://www.thegeekstuff.com/vim-101-hacks-ebook/"><img decoding="async" loading="lazy" title="Vim 101 Hacks Book" src="https://static.thegeekstuff.com/images/vim-101-hacks-132.png" alt="Vim 101 Hacks Book" /></a>
+</td>
+</tr>
+</table>
+</center>
+<br />
+				<p class="post_tags" itemprop="keywords">
+					<span class="post_tags_intro">Tagged as:</span>
+					<a href="https://www.thegeekstuff.com/tag/gprof-call-graph/" rel="tag">Gprof Call Graph</a>
+				</p>
+			</div>
+			<div id="comments">
+				<p class="comments_closed">Comments on this entry are closed.</p>
+				<ul class="comment_list">
+					<li class="comment even thread-even depth-1" id="comment-283575">
+						<div class="comment_head">
+							<span class="avatar"><a href="http://www.tscdc.com" rel="nofollow"></a></span>
+							<span class="comment_author"><a href="http://www.tscdc.com" class="url" rel="ugc external nofollow">Ethan</a></span>
+							<span class="comment_date">August 10, 2012, 7:16 pm</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-283575">
+<p>It is easy to use,clearly and instructive.</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-283575" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-284811">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Dario</span>
+							<span class="comment_date">August 13, 2012, 8:28 am</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-284811">
+<p>Very interesting, didn&#8217;t know about this command!<br />
+Thank you very much, keep up the good work!</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-284811" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment even thread-even depth-1" id="comment-325165">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Mike Dunlavey</span>
+							<span class="comment_date">October 2, 2012, 1:10 pm</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-325165">
+<p>Please stop recommending GPROF. It&#8217;s authors never even said it was much good for finding bottlenecks, and it isn&#8217;t.<br />
+Some more reasons: <a href="http://scicomp.stackexchange.com/a/2719/1262" rel="nofollow">here</a>, and <a href="http://stackoverflow.com/a/1779343/23771" rel="nofollow">here</a>.</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-325165" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-987586">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Rasna</span>
+							<span class="comment_date">October 17, 2013, 11:17 pm</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-987586">
+<p>Could you please add details about how to get gmon.out for a running process?</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-987586" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment even thread-even depth-1" id="comment-1006253">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Antoha Bikineev</span>
+							<span class="comment_date">October 30, 2013, 10:12 am</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-1006253">
+<p>I think it is better to make bigger time discrete in functions. In flat profile we expect that func1 works longer than func2. But because difference in loops is small, every time program executes we can get different sort results in flat profile. Sorry for bad English and thank you very much for this article</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-1006253" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-1272190">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Mark Richter</span>
+							<span class="comment_date">February 13, 2014, 12:13 pm</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-1272190">
+<p>I have been using gprof to isolate a performance issue in a large scale business application, but recent attempts to do this have stalled.  What we&#8217;re seeing is that at the end of the program&#8217;s execution, the CPU hangs at 100% utilization in the program, and it either takes hours (or days) to finish, or it never finishes.</p>
+<p>This never happens when the non-profiling version is run.</p>
+<p>We typically use SLES 11 for the build base, and either SLES 11 or RHEL 6 for the execution.  This always happens on RHEL 6, and with large datasets on SLES 11.</p>
+<p>Why would the profiling version hang up at the end of program execution like that?</p>
+<p>Thanks.</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-1272190" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment even thread-even depth-1" id="comment-1274562">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Mike Dunlavey</span>
+							<span class="comment_date">February 14, 2014, 6:38 am</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-1274562">
+<p>GPROF is not very good for what you need. Try this instead: <a href="http://stackoverflow.com/a/378024/23771" rel="nofollow">http://stackoverflow.com/a/378024/23771</a><br />
+Plenty of people have used it, and it gets results.<br />
+In a large application like yours, 99.9% of the time is spent in a deep call stack terminating in system functions, often doing I/O.<br />
+GPROF is blind to I/O, so you have no idea how much wall-clock time any functions in your system are actually responsible for. The flat profile is mainly about self time, which in a large program is usually irrelevant because the real problems are mid-stack. GPROF does not do a good job of getting inclusive time for functions, and it gives you no information at the level of lines of code, and if there&#8217;s recursion, it gives up.</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-1274562" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-1287976">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Alex</span>
+							<span class="comment_date">February 21, 2014, 10:41 am</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-1287976">
+<p>Stuck at &#8220;Step-2 : Execute the code&#8221;</p>
+<p>Executing the code does not produce the gmon.out.</p>
+<p>The code that I have, runs indefinitely, until I do Ctrl+C</p>
+<p>Any ideas why no gmon.out?</p>
+<p>P.S. it should not change directory.<br />
+&#8212;<br />
+Update1: Well, I ran the proram again, and this time it produced the gmon.out file.<br />
+I still stopped it by &#8220;Ctrl+C&#8221;, so I have no idea why it did not work the other time<br />
+&#8212;<br />
+Update2: It produced the gmon.out because I ran the program with the –help switch, which means clean exit.</p>
+<p>So doing a “Ctrl+C” prevents the program from producing the gmon.out</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-1287976" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment even thread-even depth-1" id="comment-1301566">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Cody</span>
+							<span class="comment_date">February 27, 2014, 7:36 pm</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-1301566">
+<p>Mike, that&#8217;s funny. The only reason I came here is I was trying to remember why gmon.out was not produced (the article didn&#8217;t help &#8211; I remembered you have to pass it to the compiler _and_ the linker and I then remembered you cannot send it a signal &#8211; it has to exit the execution in the normal way)&#8230; anyway, I took my own code, profiled it, made some adjustments to my code and dropped the CPU time from 10% to &lt; 1% for this task in question. As usual in life, it is a matter of using the tool in the right way (in addition to using the right tool) and that involves having enough experience in order to interpret it (you know, sort of like you don&#039;t use a hammer to put a screw in a screw hole? yeah, that applies here too). Just because _some_ say it is not useful for X does not mean it is _not_ useful for X. The same goes the other way around too. Bottom line: suggesting not to use a profiling tool as it isn&#039;t designed for finding bottlenecks (which incidentally, only you wrote that word.. the author was simply explaining gprof usage) or whatever else is unhelpful. The man page, by the way, suggests this:</p>
+<p>&quot;The flat profile shows how much time your program spent in each function, and how many times that function was called.  If you simply want to know which functions burn most of the cycles, it is stated concisely here.</p>
+<p>       The call graph shows, for each function, which functions called it, which other functions it called, and how many times.  There is also an estimate of how much time was spent in the subroutines of each function.  This can suggest places where you might try to eliminate function calls that use a lot of time.&quot;</p>
+<p>In other words, in the hands of an experienced programmer, it is a very valuable tool for exactly what you claim it isn&#039;t good for. (Bugs listed are irrelevant as again, just because something has a problem does not mean it is useless or never useful in any way shape or form. Oh no, the world is NOT perfect and only a fool would think otherwise or think that only perfection is valuable). You can go on all you want about how gprof knows nothing about I/O but that&#039;s not a problem (and if you know what problem you have &#8211; e.g., cpu usage is higher than it should be &#8211; then you can choose the right tool) and only a naive person would think otherwise (why do you think there is &#039;nice&#039; and &#039;ionice&#039; utilities ? Exactly, CPU cycles is only ONE variable and nothing in life is so simple). Lastly, on the subject of &#039;nice&#039; versus &#039;ionice&#039;, perhaps you need to remember the Unix philosophy of do one thing very well (and that is why the pipe can be so powerful &#8211; chaining commands together that can really make for incredibly processing power) when thinking about telling others that gprof cannot account for I/O and so is therefore useless.</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-1301566" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-1302578">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Mike Dunlavey</span>
+							<span class="comment_date">February 28, 2014, 7:33 am</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-1302578">
+<p>Hi Cody,</p>
+<p>You raise a lot of valid points, but let me itemize my objections to gprof. I&#8217;ll try to be brief.<br />
+It&#8217;s not just about gprof itself, because many newer profilers have corrected some of these objections.<br />
+It&#8217;s about the mental habits that go along with it, i.e. &#8220;myths&#8221;:</p>
+<p>1. That program counter sampling is useful (as opposed to stack sampling).</p>
+<p>2. That measuring time of functions is good enough (as opposed to lines of code or even instructions).</p>
+<p>3. That the call graph is important (as opposed to the information in stack samples).</p>
+<p>4. That recursion is a tricky confusing issue (it only is a problem when trying to construct an annotated call graph).</p>
+<p>5. That accuracy of measurement is important (as opposed to accuracy of identifying speedup opportunities).</p>
+<p>6. That invocation counting is useful (as opposed to getting inclusive time percent).</p>
+<p>7. That samples need not be taken during IO or other blockage (as opposed to sampling on wall-clock time).</p>
+<p>8. That self time matters (as opposed to inclusive time, which includes self time).</p>
+<p>9. That samples have to be taken at high frequency (they do not).</p>
+<p>10. That you are looking for &#8220;the bottleneck&#8221; (as opposed to finding all of them &#8211; there often are several).</p>
+<p>I could go into greater detail on any of these if necessary.</p>
+<p>I&#8217;m not saying you can&#8217;t find problems with these tools.<br />
+I&#8217;m saying, in big software, there are problems they won&#8217;t find, and if you really need performance, those are killers.</p>
+<p>If you need highest performance, in big software, and you can&#8217;t just kill-it-with-iron, these tools are nowhere near aggressive enough.<br />
+The human eye can recognize similarities between state samples (stack and data)<br />
+that no summarizing backend of any profiler has any hope of exposing to the user.</p>
+<p>For what it&#8217;s worth, I made a very amateur 8-minute video of how this works:<br />
+<a href="https://www.youtube.com/watch?v=xPg3sRpdW1U" rel="nofollow">https://www.youtube.com/watch?v=xPg3sRpdW1U</a></p>
+<p>Cheers</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-1302578" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment even thread-even depth-1" id="comment-1302644">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Mike Dunlavey</span>
+							<span class="comment_date">February 28, 2014, 8:20 am</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-1302644">
+<p>Rewording 3rd from last paragraph:</p>
+<p>I’m not saying you can’t find some problems with these tools.<br />
+I’m saying, in big software, there are additional problems they won’t find, and if you really need performance, those are killers.<br />
+You can think the software is as fast as possible, when in fact it could be much faster.</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-1302644" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-1302903">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Cody</span>
+							<span class="comment_date">February 28, 2014, 11:07 am</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-1302903">
+<p>Hi Mike,</p>
+<p>Well your points are also valid. I think point 10 is exactly what I was getting at: that there are many variables (pardon the pun) and that gprof is only one tool of many that can help but it can still help.</p>
+<p>Responding to your revised third paragraph:</p>
+<p>Indeed, it can always get faster and that is the con and pro of higher level languages; on the one hand, you can get more done sooner but on the other hand the executable will be larger and the executable will not be as efficient (or as fast). And hey, even if [you] were to write everything in assembly (or even machine code), there&#8217;s always room for improvement* and even without improvement we as humans always strive for faster, better, etc. (hence why CPUs of today are so much faster, better, can handle more at one time, and so on, compared to the [example from when I last did any major assembly] 16 bit days).</p>
+<p>*For instance, the following assembly is not as efficient as it could be (unless CPUs and their instructions set or rather the assemblers have improved so much that they optimise it nowadays):<br />
+mov ax, 0<br />
+versus<br />
+xor ax, ax</p>
+<p>So yes, you&#8217;re absolutely right &#8211; there is no one size fits all and each tool has their own strengths and weaknesses and the ability to recognise those strengths and weaknesses is what really helps. Shortly, I think we&#8217;re on the same page more than I thought initially and if I sounded at all arrogant (about life, about the fact there is no such thing as perfection or anything else) then I apologise. The main thing I was getting at is gprof has its uses and to dismiss it entirely is not always helpful (but then so would be dismissing your points &#8211; they are valid). But there&#8217;s always room for improvement and it really is a matter of perspective (your point about software being able to be much faster for example versus my point about assembly versus HLL and even that assembly instructions can be improved upon).</p>
+<p>Hopefully that clears up any points from my end (you did indeed clear up your points and I &#8211; besides being surprised you responded to me responding from your response from 2012 &#8211; appreciate it).</p>
+<p>(As a quick addendum: looking at your points again, I think 2 is another excellent one to consider [and something I was getting at too albeit it takes knowing the function and what it calls and where; in fact, that is how I improved my program &#8211; I knew the functions that took significant time and called the most, and combined it with the knowledge (from writing the entire [fairly large] program myself) of what called it and what it called, and was able to more or less optimise it out in most cases]. Also, I agree that recursion is not all that difficult. All in all, your points are very valid and whilst you may dislike gprof I&#8217;ve found it useful. On the other hand, I&#8217;ll take a look at what you suggested too, because as I noted, there is always room for improvement and I strive to better myself and to always learn more).</p>
+<p>Thanks for the productive discussion (I didn&#8217;t expect it but I&#8217;m more glad I responded now than I was initially).</p>
+<p>Cheers,<br />
+Cody</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-1302903" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment even thread-even depth-1" id="comment-1302913">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Cody</span>
+							<span class="comment_date">February 28, 2014, 11:12 am</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-1302913">
+<p>Alex,</p>
+<p>The reason ctrl-c prevents it from producing a gmon.out file is not so much that you hit ctrl-c (by itself) but rather what ctrl-c does: it sends an interrupt signal. The problem is gprof won&#8217;t generate the output unless it calls the exit or returns normally. This means that sending SIGINT or SIGTERM or SIGHUP to your program through the kill utility (and presumably the kill system call or raise library call) will also prevent the generation of the output file. So you need it to exit from program termination (normal termination).</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-1302913" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-1303461">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Mark Richter</span>
+							<span class="comment_date">February 28, 2014, 5:44 pm</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-1303461">
+<p>My only comment here is that what we did get from the few profiling runs that ran to completion helped us identify exactly what the performance problems were.</p>
+<p>I was much more concerned about why the profiling build of the app hung at the end, thereby preventing us from collecting the gmon,out files.</p>
+<p>Yes, I understand the limitations of most program analysis tools.  None of them are perfect, but a great many help us mere humans look in the right direction to let our brains figure out what went slow/wrong.  It&#8217;s much easier than just staring at million line-long logs that contain gobs of relatively useless information, typically enough that slogging through it is not worth the effort as compared to narrowing the focus with profiling tools so we have a clue what to look for.</p>
+<p>I take it that no one knows why a -pg program just hangs at the end of execution?</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-1303461" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment even thread-even depth-1" id="comment-1303809">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Cody</span>
+							<span class="comment_date">February 28, 2014, 10:36 pm</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-1303809">
+<p>Mark,</p>
+<p>Indeed &#8211; that we&#8217;re imperfect is something that can be turned into a strength, exactly as you described (the utility is not perfect but it still has its uses just like all things in life and even the concept of &#8216;good&#8217; comes with &#8216;bad&#8217; and &#8216;bad&#8217; comes with &#8216;good&#8217; &#8211; always). Anyway, as for why it would hang, a question and a suggestion on figuring out where its having issues :</p>
+<p>Question is: how does the program end (Does it directly call exit or does it return from main (assuming that it is C or C++) ? Okay, make that two questions (three if you count the previous one as two): does the program do this when _not_ compiled with -pg ? Anything else that is different should be kept in mind too (including &#8211; just saying and not suggesting this is it &#8211; system load).<br />
+Suggestion: while debugging is truly an art form (which by the way, if you are troubleshooting programs, I highly suggest that if you can, you learn this art as it is incredibly invaluable and that is coming from experience with this ability) even if you can do basic debugging you might be able to figure out at least where the problem lies. Can you compile the program with debugging symbols (compiler option would be &#8216;-g&#8217;, linker does not need it unlike &#8216;-pg&#8217; [typically the compiler will pass certain options to the linker but apparently -pg is not passed to it &#8211; at least according to the man page]) ? If yes, after that, if you find the task&#8217;s PID (e.g., via ps or if there&#8217;s only one instance of it, pgrep, assuming Linux [so /proc filesystem.. far as I recall, pgrep uses that but maybe my tired head is mixed up]) and attach to the program _during_ its hang up. You could do that with (examples) GDB (option -p ) or it might be easier to use something like strace (since it will show you the function running without having to look at &#8216;bt&#8217; [also &#8216;backtrace&#8217; &#8211; same command in GDB). strace invocation would be like :</p>
+<p>strace -p<br />
+(obviously replace  with the pid of the task)<br />
+GDB would be more involved once in the program but GDB you have more control over and that includes line by line execution, break points, watch points and indeed seeing where the execution is at the point you stopped it [backtrace or bt] (and whether strace needs debugging symbols or not I&#8217;m not even sure about 100% but I think not: strace ls seems to work and I highly doubt I have debugging symbols for such utility). One final note is that it is almost always not a system library bug when you see something hanging or crashing in a system library (e.g., exit can and does call other functions), despite what many developers would some times wish (because it means there is a problem in their code and so something they have to fix). Just mentioning that because I see that complaint a lot.</p>
+<p>From attaching to the program during execution (where you need to investigate), you then have an idea (well, often) where the problem is in which case you can get closer to solving the problem. I have followups enabled so if you respond maybe I can help more.</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-1303809" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-1334459">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Sameer</span>
+							<span class="comment_date">March 11, 2014, 1:00 am</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-1334459">
+<p>What about cases where i need to know the time spent by each routine in nano seconds precession ?</p>
+<p>Say for high performance applications.</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-1334459" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment even thread-even depth-1" id="comment-2009916">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Anonymous</span>
+							<span class="comment_date">July 30, 2014, 6:58 am</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-2009916">
+<p>excellent&#8230;&#8230;.</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-2009916" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-2128665">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Andreas</span>
+							<span class="comment_date">August 25, 2014, 2:54 am</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-2128665">
+<p>Thanks for this great article!<br />
+But: I don&#8217;t userstand the line</p>
+<p>67.15 30.77         30.77     2    15.39  23.14    func1</p>
+<p>How does it come that this function is called 2 times?</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-2128665" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment even thread-even depth-1" id="comment-3427553">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Vivek Kumar</span>
+							<span class="comment_date">December 30, 2014, 9:48 pm</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-3427553">
+<p>Hi</p>
+<p>Is it possible to set the gmon.out file path, when compiling the -pg option?</p>
+<p>Thanks and it is very simple. short and meaningful post.</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-3427553" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-4451036">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Kiranjp</span>
+							<span class="comment_date">September 3, 2015, 1:26 am</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-4451036">
+<p>Superb one keep up the good work man&#8230;..</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-4451036" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment even thread-even depth-1" id="comment-4735735">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Praveen Andhale</span>
+							<span class="comment_date">March 12, 2016, 4:08 am</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-4735735">
+<p>Thanks ..very helpful &#8230;</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-4735735" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-4745064">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Ehsan</span>
+							<span class="comment_date">March 16, 2016, 7:56 pm</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-4745064">
+<p>Hi, I&#8217;m doing everything right but my flat profile is empty? ( Do you have any idea why? thank you</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-4745064" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment even thread-even depth-1" id="comment-4756367">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">Anonymous</span>
+							<span class="comment_date">March 21, 2016, 4:07 pm</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-4756367">
+<p>From the man page of gcc :</p>
+<p>    -pg : Generate extra code to write profile information suitable for the analysis program gprof. You must use this option when compiling the source files you want data about, and you must also use it when linking.<br />
+can you explan , please? what is th man page gcc?</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-4756367" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-4805636">
+						<div class="comment_head">
+							<span class="avatar"></span>
+							<span class="comment_author">FrAnKenStEiN MC</span>
+							<span class="comment_date">May 14, 2016, 5:02 pm</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-4805636">
+<p>In my case the CALL GRAPH is not shown</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-4805636" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+					<li class="comment even thread-even depth-1" id="comment-4821679">
+						<div class="comment_head">
+							<span class="avatar"><a href="https://www.pismotek.com/brainout/" rel="nofollow"></a></span>
+							<span class="comment_author"><a href="https://www.pismotek.com/brainout/" class="url" rel="ugc external nofollow">Will B</a></span>
+							<span class="comment_date">June 2, 2016, 1:32 pm</span>
+						</div>
+						<div class="comment_text grt" id="comment-body-4821679">
+<p>Thank you for this, Ramesh! 🙂</p>
+						</div>
+						<div class="comment_footer">
+							<a class="comment_permalink" href="#comment-4821679" title="permalink to this comment" rel="nofollow">&#8734;</a>
+						</div>
+</li><!-- #comment-## -->
+				</ul>
+			</div>
+			<div class="prev_next">
+				<p class="next_post">Next post: <a href="https://www.thegeekstuff.com/2012/08/diff3-examples/" rel="next">11 Linux diff3 Command Examples (Compare 3 Files Line by Line)</a></p>
+				<p class="previous_post">Previous post: <a href="https://www.thegeekstuff.com/2012/08/journey-of-a-packet/" rel="prev">Journey of a Data Packet in the Internet</a></p>
+			</div>
+		</div>
+		<div class="sidebar">
+<div class="widget widget_text" id="text-21">			<div class="textwidget"><a title="Subscribe via RSS" href="https://www.thegeekstuff.com/feed" rel="nofollow">RSS</a>&nbsp; | &nbsp;<a title="Subscribe via Email" href="https://feedburner.google.com/fb/a/mailverify?uri=TheGeekStuff&loc=en_US" rel="nofollow">Email</a>&nbsp; | &nbsp;<a title="Follow us on Twitter" href="https://twitter.com/thegeekstuff" rel="nofollow">Twitter</a>&nbsp; | &nbsp;<a title="Become a fan" href="https://www.facebook.com/thegeekstuff" rel="nofollow">Facebook</a>
+<br /><br />
+<script async src="https://cse.google.com/cse.js?cx=005666763606120661560:zkmegbt_djm">
+</script>
+<div class="gcse-searchbox-only" data-resultsUrl="https://www.thegeekstuff.com/search"></div>
+<br /></div>
+		</div><div class="widget widget_text" id="text-3">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- TGS Side Bar -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-8090601437064582"
+     data-ad-slot="9054077260"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<br/></div>
+		</div><div class="widget widget_text" id="text-4"><p class="widget_title">EBOOKS</p>			<div class="textwidget"><ul>
+<li><img title="Linux 101 Hacks Book" src="https://static.thegeekstuff.com/images/free-small.png" alt="Linux 101 Hacks Book" />&nbsp;<a href="https://www.thegeekstuff.com/linux-101-hacks-ebook/">Linux 101 Hacks 2nd Edition eBook</a> - Practical Examples to Build a Strong Foundation in Linux</li>
+<li><a href="https://www.thegeekstuff.com/bash-101-hacks-ebook/">Bash 101 Hacks eBook</a> - Take Control of Your Bash Command Line and Shell Scripting</li>
+<li><a href="https://www.thegeekstuff.com/sed-awk-101-hacks-ebook/">Sed and Awk 101 Hacks eBook</a> - Enhance Your UNIX / Linux Life with Sed and Awk</li>
+<li><a href="https://www.thegeekstuff.com/vim-101-hacks-ebook/">Vim 101 Hacks eBook</a> - Practical Examples for Becoming Fast and Productive in Vim Editor</li>
+<li><a href="https://www.thegeekstuff.com/nagios-core-ebook/">Nagios Core 3 eBook</a> - Monitor Everything, Be Proactive, and Sleep Well</li>
+</ul></div>
+		</div><div class="widget widget_text" id="text-22">			<div class="textwidget"><iframe loading="lazy" src="//www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2Fthegeekstuff&amp;width&amp;height=258&amp;colorscheme=light&amp;show_faces=true&amp;header=false&amp;stream=false&amp;show_border=true" scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:258px;" allowTransparency="true"></iframe></div>
+		</div><div class="widget widget_text" id="text-17"><p class="widget_title">POPULAR POSTS</p>			<div class="textwidget"><ul>
+<li><a href="https://www.thegeekstuff.com/dslr-accessories/">15 Essential Accessories for Your Nikon or Canon DSLR Camera</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/01/12-amazing-and-essential-linux-books-to-enrich-your-brain-and-library/">12 Amazing and Essential Linux Books To Enrich Your Brain and Library</a></li>
+<li><a href="https://www.thegeekstuff.com/2010/12/50-unix-linux-sysadmin-tutorials/">50 UNIX / Linux Sysadmin Tutorials</a></li>
+<li><a href="https://www.thegeekstuff.com/2010/11/50-linux-commands/">50 Most Frequently Used UNIX / Linux Commands (With Examples)</a></li>
+<li><a href="https://www.thegeekstuff.com/2010/08/gtd-getting-things-done/">How To Be Productive and Get Things Done Using GTD</a></li>
+<li><a href="https://www.thegeekstuff.com/2010/03/30-things-to-do-when-you-are-bored-and-have-a-computer/">30 Things To Do When you are Bored and have a Computer</a></li>
+<li><a href="https://www.thegeekstuff.com/2010/09/linux-file-system-structure/">Linux Directory Structure (File System Structure) Explained with Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/06/15-practical-crontab-examples/">Linux Crontab: 15 Awesome Cron Job Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/03/15-practical-unix-grep-command-examples/">Get a Grip on the Grep! – 15 Practical Grep Command Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/07/linux-ls-command-examples/">Unix LS Command: 15 Practical Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2008/08/15-examples-to-master-linux-command-line-history/">15 Examples To Master Linux Command Line History</a></li>
+<li><a href="https://www.thegeekstuff.com/2010/08/bug-tracking-system/">Top 10 Open Source Bug Tracking System</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/01/vi-and-vim-macro-tutorial-how-to-record-and-play/">Vi and Vim Macro Tutorial: How To Record and Play</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/03/15-practical-linux-find-command-examples/">Mommy, I found it! -- 15 Practical Linux Find Command Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/07/best-gmail-tips-and-tricks/">15 Awesome Gmail Tips and Tricks</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/06/expertise-in-google-search/">15 Awesome Google Search Tips and Tricks</a></li>
+<li><a href="https://www.thegeekstuff.com/2010/08/raid-levels-tutorial/">RAID 0, RAID 1, RAID 5, RAID 10 Explained with Diagrams</a></li>
+<li><a href="https://www.thegeekstuff.com/2010/01/15-practical-unix-linux-top-command-examples/">Can You Top This? 15 Practical Linux Top Command Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/09/top-5-best-network-monitoring-tools/">Top 5 Best System Monitoring Tools</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/06/top-5-best-linux-os-distributions/">Top 5 Best Linux OS Distributions</a></li>
+<li><a href="https://www.thegeekstuff.com/2008/06/how-to-monitor-remote-linux-host-using-nagios-30/">How To Monitor Remote Linux Host using Nagios 3.0</a></li>
+<li><a href="https://www.thegeekstuff.com/2010/01/awk-introduction-tutorial-7-awk-print-examples/">Awk Introduction Tutorial – 7 Awk Print Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2010/09/rsync-command-examples/">How to Backup Linux? 15 rsync Command Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/09/the-ultimate-wget-download-guide-with-15-awesome-examples/">The Ultimate Wget Download Guide With 15 Awesome Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/07/top-5-best-linux-text-editors/">Top 5 Best Linux Text Editors</a></li>
+<li><a href="https://www.thegeekstuff.com/2010/08/tcpdump-command-examples/">Packet Analyzer: 15 TCPDUMP Command Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2010/06/bash-array-tutorial/">The Ultimate Bash Array Tutorial with 15 Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2008/11/3-steps-to-perform-ssh-login-without-password-using-ssh-keygen-ssh-copy-id/">3 Steps to Perform SSH Login Without Password Using ssh-keygen & ssh-copy-id</a></li>
+<li><a href="https://www.thegeekstuff.com/2009/10/unix-sed-tutorial-advanced-sed-substitution-examples/">Unix Sed Tutorial: Advanced Sed Substitution Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2010/03/netstat-command-examples/">UNIX / Linux: 10 Netstat Command Examples</a></li>
+<li><a href="https://www.thegeekstuff.com/2008/06/the-ultimate-guide-for-creating-strong-passwords/">The Ultimate Guide for Creating Strong Passwords</a></li>
+<li><a href="https://www.thegeekstuff.com/2008/08/6-steps-to-secure-your-home-wireless-network/">6 Steps to Secure Your Home Wireless Network</a></li>
+<li><a href="https://www.thegeekstuff.com/2008/08/turbocharge-putty-with-12-powerful-add-ons-software-for-geeks-3/">Turbocharge PuTTY with 12 Powerful Add-Ons</a></li>
+</ul></div>
+		</div><div class="widget widget_text" id="text-19"><p class="widget_title">CATEGORIES</p>			<div class="textwidget"><ul>
+<li><a rel="nofollow" href="/category/linux/">Linux Tutorials</a></li>
+<li><a rel="nofollow" href="/category/vim-2/">Vim Editor</a></li>
+<li><a rel="nofollow" href="/category/sed/">Sed Scripting</a></li>
+<li><a rel="nofollow" href="/category/awk/">Awk Scripting</a></li>
+<li><a rel="nofollow" href="/category/bash-2/">Bash Shell Scripting</a></li>
+<li><a rel="nofollow" href="/category/nagios-2/">Nagios Monitoring</a></li>
+<li><a rel="nofollow" href="/category/openssh-2/">OpenSSH</a></li>
+<li><a rel="nofollow" href="/category/iptables/">IPTables Firewall</a></li>
+<li><a rel="nofollow" href="/category/apache/">Apache Web Server</a></li>
+<li><a rel="nofollow" href="/category/mysql/">MySQL Database</a></li>
+<li><a rel="nofollow" href="/category/perl/">Perl Programming</a></li>
+<li><a rel="nofollow" href="/category/google/">Google Tutorials</a></li>
+<li><a rel="nofollow" href="/category/ubuntu/">Ubuntu Tutorials</a></li>
+<li><a rel="nofollow" href="/category/postgresql/">PostgreSQL DB</a></li>
+<li><a rel="nofollow" href="/category/hello-world/">Hello World Examples</a></li>
+<li><a rel="nofollow" href="/category/c-programming/">C Programming</a></li>
+<li><a rel="nofollow" href="/category/c-plus-plus/">C++ Programming</a></li>
+<li><a rel="nofollow" href="/category/dell-2/">DELL Server Tutorials</a></li>
+<li><a rel="nofollow" href="/category/oracle/">Oracle Database</a></li>
+<li><a rel="nofollow" href="/category/vmware/">VMware Tutorials</a></li>
+</ul></div>
+		</div>		</div>
+	</div>
+	<div class="footer">
+<div id="footer_widgets" class="columns_3">
+	<div class="one-third sidebar first">
+<div class="widget widget_text" id="text-7"><h4 class="widget_title">About The Geek Stuff</h4>			<div class="textwidget"><br />
+<img decoding="async" loading="lazy" class="float" title="Ramesh Natarajan" src="https://static.thegeekstuff.com/images/ramesh-small.gif" alt="Linux 101 Hacks Book" />
+My name is <strong>Ramesh Natarajan</strong>. I will be posting instruction guides, how-to, troubleshooting tips and tricks on Linux, database, hardware, security and web. My focus is to write articles that will either teach you or help you resolve a problem. Read more about <a href="https://www.thegeekstuff.com/about/">Ramesh Natarajan</a> and the blog.</div>
+		</div>	</div>
+	<div class="one-third sidebar">
+<div class="widget widget_text" id="text-9"><h4 class="widget_title">Contact Us</h4>			<div class="textwidget"><br />
+<strong>Email Me :</strong>
+Use this <a href="https://www.thegeekstuff.com/contact" rel="nofollow">Contact Form</a> to get in touch me with your comments, questions or suggestions about this site. You can also simply drop me a line to say hello!.
+<br /><br />
+<a title="Follow us on Twitter" href="https://twitter.com/thegeekstuff" rel="nofollow">Follow us on Twitter</a>
+<br /><br />
+<a href="
+https://www.facebook.com/thegeekstuff" rel="nofollow">Become a fan on Facebook</a>&nbsp;&nbsp;</div>
+		</div>	</div>
+	<div class="one-third sidebar last">
+<div class="widget widget_text" id="text-8"><h4 class="widget_title">Support Us</h4>			<div class="textwidget"><br />
+Support this blog by purchasing one of my ebooks.
+<br /><br />
+<a rel="nofollow" href="https://www.thegeekstuff.com/bash-101-hacks-ebook/">Bash 101 Hacks eBook</a>
+<br /><br />
+<a rel="nofollow" href="https://www.thegeekstuff.com/sed-awk-101-hacks-ebook/">Sed and Awk 101 Hacks eBook</a>
+<br /><br />
+<a rel="nofollow" href="https://www.thegeekstuff.com/vim-101-hacks-ebook/">Vim 101 Hacks eBook</a>
+<br /><br />
+<a rel="nofollow" href="https://www.thegeekstuff.com/nagios-core-ebook/">Nagios Core 3 eBook</a></div>
+		</div>	</div>
+	<div style="clear:both;"></div>
+</div>
+		<p class="attribution"><p>Copyright © 2008–2023 Ramesh Natarajan. All rights reserved  | <a href="https://www.thegeekstuff.com/copyright">Terms of Service</a> </p></p>
+	</div>
+</div>
+<script>(function(d,g){d[g]||(d[g]=function(g){return this.querySelectorAll("."+g)},Element.prototype[g]=d[g])})(document,"getElementsByClassName");(function(){var classes = document.getElementsByClassName('menu_control');for (i = 0; i < classes.length; i++) {classes[i].onclick = function() {var menu = this.nextElementSibling;if (/show_menu/.test(menu.className))menu.className = menu.className.replace('show_menu', '').trim();else menu.className += ' show_menu';if (/menu_control_triggered/.test(this.className))this.className = this.className.replace('menu_control_triggered', '').trim();else this.className += ' menu_control_triggered';};}})();</script>
+</body>
+</html>
+<!--
+Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/
+
+Page Caching using disk: enhanced 
+Content Delivery Network via Amazon Web Services: CloudFront: static.thegeekstuff.com
+
+Served from: www.thegeekstuff.com @ 2024-02-14 07:57:43 by W3 Total Cache
+-->

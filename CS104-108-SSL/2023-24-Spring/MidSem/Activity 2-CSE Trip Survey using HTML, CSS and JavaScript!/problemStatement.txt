@@ -1,0 +1,36 @@
+Weightage: 10
+Last month, CSE Trip happened to Daman and Silvassa. CSE Council wants to conduct an anonymous feedback. Surprisingly, they don’t know how to make a Google Form! Help them make a survey form in HTML, CSS, and JavaScript.
+HTML [2.5 marks]
+Complete survey.html file with specifications as below:
+Give a title “CSE Trip Survey” to the webpage
+Give a <h1> heading “CSE Trip Anonymous Feedback” in the body
+Inside the <div> container with id = “formContainer”, there are 2 <div> containers of class “Box” already created for 2 questions.
+--------For each question, you must complete their <div> container. Inside the “Box” <div> container, there should be 2 elements:-
+A question, written using <p> tag
+An input, using <input> tag and type = “text” and give them class “Rating”
+--------The 2 questions are as under:
+“Q1: How would you rate the trip?”
+“Q2: How would you rate the fun you had?”
+CSS [2.5 marks]
+The style.css file is already imported for you in the <head> section. 
+Use inline CSS to align the <h1> heading text in the center. 
+Use internal CSS to give “lightpink” as the background color to <div> container of id = “formContainer”. 
+Use external CSS to give 50 px width to the <input> tag elements of class “Rating”. 
+DO NOT TOUCH/MODIFY ANY PRE-WRITTEN CONTENT IN THE STYLE.CSS FILE.
+After doing the HTML and CSS parts correctly, the webpage should look like this:-
+(Look at css.png for this)
+JavaScript [5 marks]
+This JavaScript task is independent of the above HTML, CSS tasks. The HTML file for this JavaScript task is javascript.html. [DO NOT CHANGE this file.]
+The script.js file is already imported for you in the <head> section.
+Complete the checkRating() function in script.js:
+---------You have to check whether the given input is a valid rating or not using this function. This function is called on clicking ‘Check Rating’ button in javascript.html. For that, follow the steps below.
+---------Go through the input in the <input> box of id=”rating_input”:
+If there is no input (i.e. empty), or there is an input, but it is not an integer >=0 and <=10, use the alert function to give a pop-up message: “Invalid Response. Try again, please!”.
+You can assume that the autograder will either leave the input box empty or will provide an integer; no other types of input will be given.
+---------If there is no error, the function should use “alert” to give a pop-up message: “Thank you for your response!”.
+Note:- Test cases shall be used to evaluate the correctness of the function checkRating(). Refer to public_testcases.txt for the inputs and corresponding alert messages.
+IMPORTANT NOTE:- Your JavaScript task will be evaluated against hidden testcases later, hence the marks displayed at the time of exam may not be the final ones. Also, the original version of “javascript.html” will be used to evaluate later, so any changes that you make in it will not be considered.
+Example of a valid input:-
+(Look at valid.png)
+Example of an invalid input:-
+(Look at invalid.png)

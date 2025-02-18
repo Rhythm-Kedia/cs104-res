@@ -1,0 +1,14 @@
+EXECUTABLE := my_exec_2
+DOT_o_FILES := print-1.o print-2.o my_2.o
+
+$(EXECUTABLE): $(DOT_o_FILES)
+	g++ $^ -o $@
+
+%.o: %.cpp
+	@echo $^
+	g++ -c $^ -o $@
+
+.PHONY: clean
+clean:
+	rm -f *.o
+	rm -f $(EXECUTABLE)

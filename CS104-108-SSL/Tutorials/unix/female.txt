@@ -1,0 +1,4 @@
+ID,Name,E-mail,Gender,Year,Department
+210260200,Kiara Advani,kiara@ep.iitb.ac.in,F,2021,EP
+22b9999,Rashmika Mandanna,rashmika@ee.iitb.ac.in,F,2022,EE
+22b9090,Harmanpreet Kaur,harman@me.iitb.ac.in,F,2022,ME

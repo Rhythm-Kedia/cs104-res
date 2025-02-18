@@ -1,0 +1,8 @@
+ID,Name,E-mail,Gender,Year,Department
+200071030,Akshay Kumar,akshay@ee.iitb.ac.in,M,2020,EE
+210050061,Guramrit Singh,guramrit@cse.iitb.ac.in,M,2021,CSE
+22b9090,Harmanpreet Kaur,harman@me.iitb.ac.in,F,2022,ME
+22b1053,Kavya Gupta,kforkavya@cse.iitb.ac.in,M,2022,CSE
+210260200,Kiara Advani,kiara@ep.iitb.ac.in,F,2021,EP
+22b9999,Rashmika Mandanna,rashmika@ee.iitb.ac.in,F,2022,EE
+22b1003,Saksham Rathi,sakshamrathi@cse.iitb.ac.in,M,2022,CSE

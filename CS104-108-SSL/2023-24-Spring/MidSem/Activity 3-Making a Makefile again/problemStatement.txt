@@ -1,0 +1,28 @@
+Weightage: 4
+
+In this question, you are supposed to write a makefile for a small project in the file named Makefile. In the current working directory(/home/labDirectory), we have 5 cpp files and 3 header files and 1 Makefile. Of the 5 cpp files, 2 of them have a main function, the other 3 don't.
+
+After running make command, the final working directory should have the following files:
+The original 9 files as shown above
+3 Object files corresponding to the 3 cpp files in this directory which do not have the main function.
+2 Executables corresponding to the 2 cpp files with the main function.
+No other files should be present anywhere else in the working directory. (On failing which will result in NEGATIVE marks)
+
+We will also run the following command
+make CXXFLAGS="--std=c++11 -Wall -Werror" to compile the code with the given flags. Use CXXFLAGS for both compilation and linking. We may use different flags during final evaluation, so make sure that the flags are not hardcoded in the makefile.(Read HINT given at the end of description.) On simply running make, you can use just the --std=c++11 flag.
+
+Also, create a target that removes all the created object files and executables without removing any original files. For this we will run the command make restore.
+
+For creation of every object and executable file, take care of the dependencies, to ensure minimal recompilation. By this we mean that if a file A is dependent on B but not on C, then a change to B should trigger the recompilation of A but a change to C should not trigger the recompilation of A.
+
+NOTE:
+For final evaluation, we will be using the given complete set of files only. We will not change/add new files or change the content of the files.
+However, there may be change in marking scheme and recompilation testcases.
+
+HINT: OVERRIDING VARIABLES
+An argument that contains ‘=’ specifies the value of a variable,: ‘v=x’ sets the value of the variable v to x. If you specify a value in this way, all ordinary assignments of the same variable in the makefile are ignored; we say they have been overridden by the command line argument The most common way to use this facility is to pass extra flags to compilers. For example, in a makefile, let’s say you create and set the value of variable CFLAGS to -g, and use them as compilation flags.
+CFLAGS=-g
+cc -c $(CFLAGS) foo.c
+Each time you run make, you can override this value if you wish. For example, if you run 
+make CFLAGS=”-g -O”
+, each C compilation will be done with ‘cc -c -g -O’.

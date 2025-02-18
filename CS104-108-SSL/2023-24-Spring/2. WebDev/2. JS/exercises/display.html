@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Property Examples</title>
+    <style>
+        /* FLEXBOX */
+        .flex-container {
+            display: flex;
+            justify-content: space-around;
+            background-color: lightblue;
+            padding: 10px;
+        }
+        .flex-item {
+            background: white;
+            padding: 10px;
+            border: 1px solid black;
+        }
+
+        /* GRID */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            background-color: lightcoral;
+            padding: 10px;
+        }
+        .grid-item {
+            background: white;
+            padding: 10px;
+            border: 1px solid black;
+        }
+
+        /* TABLE */
+        .table {
+            display: table;
+            width: 100%;
+            border-collapse: collapse;
+            background-color: lightgreen;
+        }
+        .row {
+            display: table-row;
+        }
+        .cell {
+            display: table-cell;
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        /* LIST-ITEM */
+        .list-container {
+            list-style-type: disc;
+            background-color: lightyellow;
+            padding: 10px;
+        }
+        .list-item {
+            display: list-item;
+        }
+
+        /* CONTENTS */
+        .contents-wrapper {
+            display: contents;
+        }
+        .contents-wrapper span {
+            background-color: lightgray;
+            padding: 5px;
+        }
+
+        /* INHERIT */
+        .inherit-parent {
+            display: flex;
+        }
+        .inherit-child {
+            display: inherit;
+            background-color: lightpink;
+            padding: 5px;
+        }
+
+        /* INITIAL */
+        .initial-box {
+            display: block; /* Changing it from something else */
+        }
+        .initial-box p {
+            display: initial; /* Resets to default (block) */
+            background-color: lightseagreen;
+            padding: 5px;
+        }
+
+        /* REVERT */
+        .revert-box {
+            display: flex; /* Overriding default */
+        }
+        .revert-box div {
+            display: revert; /* Resets back to browser default */
+            background-color: lightsteelblue;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Flexbox Example</h2>
+    <div class="flex-container">
+        <div class="flex-item">Item 1</div>
+        <div class="flex-item">Item 2</div>
+        <div class="flex-item">Item 3</div>
+    </div>
+
+    <h2>Grid Example</h2>
+    <div class="grid-container">
+        <div class="grid-item">Grid 1</div>
+        <div class="grid-item">Grid 2</div>
+        <div class="grid-item">Grid 3</div>
+    </div>
+
+    <h2>Table Example</h2>
+    <div class="table">
+        <div class="row">
+            <div class="cell">Row 1, Cell 1</div>
+            <div class="cell">Row 1, Cell 2</div>
+        </div>
+        <div class="row">
+            <div class="cell">Row 2, Cell 1</div>
+            <div class="cell">Row 2, Cell 2</div>
+        </div>
+    </div>
+
+    <h2>List-Item Example</h2>
+    <ul class="list-container">
+        <li class="list-item">List Item 1</li>
+        <li class="list-item">List Item 2</li>
+    </ul>
+
+    <h2>Contents Example</h2>
+    <div class="contents-wrapper">
+        <span>This is inside a contents container.</span>
+    </div>
+
+    <h2>Inherit Example</h2>
+    <div class="inherit-parent">
+        <div class="inherit-child">This child inherits display: flex</div>
+    </div>
+
+    <h2>Initial Example</h2>
+    <div class="initial-box">
+        <p>This paragraph has display: initial (block).</p>
+    </div>
+
+    <h2>Revert Example</h2>
+    <div class="revert-box">
+        <div>This div has display: revert.</div>
+    </div>
+
+</body>
+</html>

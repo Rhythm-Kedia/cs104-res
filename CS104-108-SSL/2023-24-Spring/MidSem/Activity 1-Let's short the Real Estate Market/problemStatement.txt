@@ -1,0 +1,15 @@
+Weightage: 6
+In the vibrant financial landscape of New York City, Michael Burry (remember?), a financial analyst, challenged the 2008 pre-crisis optimism. Banks and financial institutions were riding high on the belief that real estate was an unassailable fortress. (Do you still think the same? Be ready for a surprise!) However, Michael sensed an impending storm in the real estate market. Despite facing skepticism and disbelief from his peers (and his investors too!) Michael embarked on a mission to gather evidence that would support his contrarian view. Late into the night, fueled by determination that real estate was a bubble ready to burst, he compiled his findings into a comprehensive text file.
+
+Assume Michael has a text file named analysis.txt. The file contains comma separated values (no spaces). There are five columns, Name, LoanID, PaymentHistory, CreditUtilization, LengthOfCreditHistory. Michael did all of this work at night, so he has also made some mistakes in writing this .txt file. So, here are the primary conditions:
+1. Name has the first letter as uppercase and the remaining letters as lower case. (The total length of this name string is arbitrary but greater than 1)
+2. The LoanID is a 6 letter string whose first two letters are uppercase characters, then “@” and then a three-digit number. (From 001 to 999, both inclusive but 000 is excluded).
+3. The PaymentHistory and CreditUtilization are numbers. (The number of digits in both of them are >= 0).
+4. The LengthofCreditHistory is another string which is of the form “[n]days”. Where n is another number of arbitrary length > 0. So “0days”, “1days”, “233days” are valid but “days” and “day” are not valid strings. The line will end after this string.
+5. Remember, there should not be any space character anywhere in the file. (Not even at the start and end of a line!)
+
+Firstly, from analysis.txt, move all the correct entries to michaelsleep.txt (with headings intact). Then take the first two columns of michaelsleep.txt, sort them based on name in increasing order and move to michaelhero.txt (again with headings intact). Also, these two columns should be separated by a single space character and commas should be removed. You need to write your commands in submission.sh.
+
+
+Let’s see an example to understand all of this stuff better. (The sample files are also provided in the labDirectory folder.)
+
